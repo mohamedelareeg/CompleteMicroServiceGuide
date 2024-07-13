@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  inventory:
+    image: ${DOCKER_REGISTRY-}inventory
+    build:
+      context: .
+      dockerfile: src/CompleteMicroServiceGuide.Api/Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: InventoryDB
+    ports:
+      - "5437:5432"
+    networks:
+      - backend
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  eventsourcinggrpc:
+    image: ${DOCKER_REGISTRY-}inventoryeventsourcinggrpc
+    build:
+      context: .
+      dockerfile: src/CompleteMicroServiceGuideGRPC/Dockerfile
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+
+  supplier:
+    image: ${DOCKER_REGISTRY-}supplier
+    build:
+      context: .
+      dockerfile: src/Supplier.Api/Dockerfile
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    volumes:
+      - mongo-data:/data/db
+
+  invoice:
+    image: ${DOCKER_REGISTRY-}invoiceapi
+    build:
+      context: .
+      dockerfile: src/Invoice.Api/Dockerfile
+    depends_on:
+      - mysql
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: InvoiceDB
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+networks:
+  backend:
+
+volumes:
+  postgres-data:
+  mongo-data:
+  mysql-data:

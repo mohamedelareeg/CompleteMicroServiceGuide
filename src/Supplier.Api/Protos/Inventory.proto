@@ -1,0 +1,95 @@
+syntax = "proto3";
+option csharp_namespace = "EventSourcingGRPC.Protos";
+
+package EventSourcing;
+
+message AddProductToInventoryRequest {
+    string product_id = 1;
+    string name = 2;
+    string warehouse_id = 3;
+}
+
+message GetProductDetailsRequest {
+    string product_id = 1;
+    string warehouse_id = 2;
+}
+
+message RemoveProductFromInventoryRequest {
+    string product_id = 1;
+    string warehouse_id = 2;
+}
+
+message UpdateProductInfoRequest {
+    string product_id = 1;
+    string name = 2;
+    string warehouse_id = 3;
+}
+
+message SaleProductRequest {
+    string warehouse_id = 1;
+    string product_id = 2;
+    int32 quantity = 3;
+    double price = 4;
+}
+
+message PurchaseProductRequest {
+    string warehouse_id = 1;
+    string product_id = 2;
+    int32 quantity = 3;
+    double price = 4;
+}
+
+message TransferProductRequest {
+    string source_warehouse_id = 1;
+    string target_warehouse_id = 2;
+    string product_id = 3;
+    int32 quantity = 4;
+}
+
+// Response message for AddProductToInventory
+message AddProductToInventoryResponse {
+    string message = 1;
+}
+
+message ProductInfo {
+    string name = 1;
+    int32 current_quantity = 2;
+    repeated ProductTransactionDto transactions = 3;
+}
+message ProductTransactionDto {
+    string id = 1;
+    int32 quantity_changed = 2;
+    int32 current_quantity = 3;
+    double last_price = 4;
+    string transaction_type = 5;
+}
+// Response message for GetProductDetails
+message GetProductDetailsResponse {
+    ProductInfo product_info = 1;
+}
+
+// Response message for RemoveProductFromInventory
+message RemoveProductFromInventoryResponse {
+    string message = 1;
+}
+
+// Response message for UpdateProductInfo
+message UpdateProductInfoResponse {
+    string message = 1;
+}
+
+// Response message for SaleProduct, PurchaseProduct, TransferProductBetweenWarehouses
+message TransactionResponse {
+    string message = 1;
+}
+
+// Define service
+service InventoryProtoService {
+    rpc AddProductToInventory(AddProductToInventoryRequest) returns (AddProductToInventoryResponse);
+    rpc GetProductDetails(GetProductDetailsRequest) returns (GetProductDetailsResponse);
+    rpc RemoveProductFromInventory(RemoveProductFromInventoryRequest) returns (RemoveProductFromInventoryResponse);
+    rpc UpdateProductInfo(UpdateProductInfoRequest) returns (UpdateProductInfoResponse);
+    rpc SaleProduct(SaleProductRequest) returns (TransactionResponse);
+    rpc PurchaseProduct(PurchaseProductRequest) returns (TransactionResponse);
+    rpc TransferProductBetweenWarehouses(TransferProductRequest) returns (TransactionResponse);
+}

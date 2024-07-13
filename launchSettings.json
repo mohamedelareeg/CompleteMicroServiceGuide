@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "CompleteMicroServiceGuide.api": "StartDebugging",
+        "CompleteMicroServiceGuidegrpc": "StartDebugging",
+        "supplier.api": "StartDebugging",
+        "invoice.api": "StartDebugging"
+      }
+    }
+  }
+}

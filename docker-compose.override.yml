@@ -1,0 +1,47 @@
+services:
+  inventory:
+    environment:
+     - ASPNETCORE_ENVIRONMENT=Development
+     - ASPNETCORE_HTTP_PORTS=27511
+     - ASPNETCORE_HTTPS_PORTS=27512
+    ports:
+     - "27511:27511"
+     - "27512:27512"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  eventsourcinggrpc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=27611
+      - ASPNETCORE_HTTPS_PORTS=27612
+    ports:
+     - "27611:27611"
+     - "27612:27612"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  supplier:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=27711
+      - ASPNETCORE_HTTPS_PORTS=27712
+    ports:
+     - "27711:27711"
+     - "27712:27712"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  invoice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=27811
+      - ASPNETCORE_HTTPS_PORTS=27812
+    ports:
+     - "27811:27811"
+     - "27812:27812"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
